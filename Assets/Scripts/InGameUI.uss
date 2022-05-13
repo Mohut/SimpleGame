@@ -1,0 +1,15 @@
+.unity-text-element {
+}
+
+.unity-button {
+}
+
+.main-menu-button {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: rgba(44, 159, 47, 255);
+    width: 37%;
+    height: 21%;
+}
