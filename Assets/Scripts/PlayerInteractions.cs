@@ -1,10 +1,17 @@
 using System.Collections;
+using DM.Balls;
 using UnityEngine;
 
 public class PlayerInteractions : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
     [SerializeField] private float invincibilityTime = 1;
+    [SerializeField] private Color gotHitColor;
+    [SerializeField] private Color playerColor;
+    [SerializeField] private Color powerUpColor;
+    [SerializeField] private PowerUpSpawner powerUpSpawner;
+    [SerializeField] private BallSpawner ballSpawner;
+    
     private WaitForSeconds invincibilityDelay;
     private bool hasPowerUp;
     private int lifes = 2;
@@ -13,7 +20,6 @@ public class PlayerInteractions : MonoBehaviour
     {
         invincibilityDelay = new WaitForSeconds(invincibilityTime);
         
-        EventManager.PillCollectedEvent += ChangePlayerAppearance;
         EventManager.PillCollectedEvent += MakePlayerInvincible;
         EventManager.PlayerGotHitEvent += SubstractLife;
         EventManager.PlayerGotHitEvent += ChangePlayerAppearance;
@@ -21,7 +27,6 @@ public class PlayerInteractions : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.PillCollectedEvent -= ChangePlayerAppearance;
         EventManager.PillCollectedEvent -= MakePlayerInvincible;
         EventManager.PlayerGotHitEvent -= SubstractLife;
         EventManager.PlayerGotHitEvent -= ChangePlayerAppearance;
@@ -50,7 +55,7 @@ public class PlayerInteractions : MonoBehaviour
     }
     private void ChangePlayerAppearance()
     {
-        playerSpriteRenderer.color = Color.red;
+        playerSpriteRenderer.color = gotHitColor;
     }
     private void SubstractLife()
     {
@@ -68,9 +73,9 @@ public class PlayerInteractions : MonoBehaviour
     IEnumerator Co_MakePlayerInvincible()
     {
         hasPowerUp = true;
-        playerSpriteRenderer.color = Color.green;
+        playerSpriteRenderer.color = powerUpColor;
         yield return invincibilityDelay;
-        playerSpriteRenderer.color = Color.white;
+        playerSpriteRenderer.color = playerColor;
         hasPowerUp = false;
     }
 }

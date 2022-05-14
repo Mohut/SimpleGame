@@ -13,6 +13,7 @@ namespace DM.Balls
         [SerializeField] private GameObject ballPrefab;
         [SerializeField] private int spawnRate;
         [SerializeField] private int maxBalls;
+        private int currentActiveBalls;
         private bool active;
         private Vector3 rightRotation;
         private Tween rightRotationTween;
@@ -24,6 +25,7 @@ namespace DM.Balls
             EventManager.GameOverEvent += DeleteAllBalls;
             EventManager.GameOverEvent += SetNotActive;
             EventManager.GameStartEvent += SetActive;
+            EventManager.KillEnemyEvent += ReduceCurrentActiveBalls;
             
             rightRotation = new Vector3(0, 0, 40);
             balls = new List<GameObject>();
@@ -38,6 +40,7 @@ namespace DM.Balls
             EventManager.GameOverEvent -= DeleteAllBalls;
             EventManager.GameOverEvent -= SetNotActive;
             EventManager.GameStartEvent -= SetActive;
+            EventManager.KillEnemyEvent -= ReduceCurrentActiveBalls;
         }
 
         private void SetActive()
@@ -49,6 +52,11 @@ namespace DM.Balls
         {
             active = false;
         }
+
+        private void ReduceCurrentActiveBalls()
+        {
+            currentActiveBalls--;
+        }
         
         private void Swing()
         {
@@ -59,14 +67,20 @@ namespace DM.Balls
 
         private void SpawnBall()
         {
-            if(balls.Count < maxBalls && active)
+            if (currentActiveBalls < maxBalls && active)
+            {
                 StartCoroutine(Co_SpawnBall());
+                currentActiveBalls++;
+            }
+                
         }
 
         private void DeleteAllBalls()
         {
             for(int i = 0; i < balls.Count; i++)
                 Destroy(balls[i]);
+
+            currentActiveBalls = 0;
         }
         
 
